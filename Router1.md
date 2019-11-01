@@ -58,23 +58,19 @@ ip access-list flt-list permit ip src any dest any
 
 ip access-list sec-list permit ip src any dest any
 
-!
 
-!
-
-!
 
 ike nat-traversal
 
-!
+
 
 ike initial-contact always
 
-!
+
 
 ike proposal ikeprop encryption aes-256 hash md5 group 1024-bit
 
-!
+
 
 ike policy ike-policy peer 10.255.100.161 key secret-vpn mode aggressive ikeprop
 
@@ -82,11 +78,11 @@ ike keepalive ike-policy 10 3
 
 ike local-id ike-policy keyid router2-vpn
 
-!
+
 
 ipsec autokey-proposal secprop esp-aes-256 esp-md5 lifetime time 3600
 
-!
+
 
 ipsec autokey-map ipsec-policy sec-list peer 10.255.100.161 default
 
@@ -94,71 +90,29 @@ ipsec local-id ipsec-policy 10.255.100.160/24
 
 ipsec remote-id ipsec-policy 10.255.100.161/24
 
-!
 
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!
 
 telnet-server ip enable
 
-!
 
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!       
-
-!
-
-!
-
-!
 
 device FastEthernet0/0
 
-!
+
 
 device FastEthernet0/1
 
-!
+
 
 device FastEthernet1/0
 
-!
+
 
 device BRI1/0
 
   isdn switch-type hsd128k
 
-!
+
 
 interface FastEthernet0/0.0
 
@@ -168,7 +122,7 @@ interface FastEthernet0/0.0
 
   no shutdown
 
-!
+
 
 interface FastEthernet0/1.0
 
@@ -176,7 +130,7 @@ interface FastEthernet0/1.0
 
   shutdown
 
-!
+
 
 interface FastEthernet1/0.0
 
@@ -184,7 +138,7 @@ interface FastEthernet1/0.0
 
   shutdown
 
-!
+
 
 interface BRI1/0.0
 
@@ -196,7 +150,7 @@ interface BRI1/0.0
 
   shutdown
 
-!
+
 
 interface FastEthernet0/0.1
 
@@ -208,19 +162,19 @@ interface FastEthernet0/0.1
 
   shutdown
 
-!
+
 
 interface Loopback0.0
 
   no ip address
 
-!       
+
 
 interface Null0.0
 
   no ip address
 
-!
+
 
 interface Tunnel0.0
 

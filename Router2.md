@@ -6,27 +6,17 @@
 
 ! Current time Oct 31-Thu-2019 18:42:26 JST
 
-!
 
-!hostname Router2timezone +09 00
 
-!
+hostname Router2
 
-!
+timezone +09 00
 
-!
 
-!
 
 username admin password hash 0C34240482 administrator
 
-!
 
-!
-
-!
-
-!
 
 !logging buffered 100000 cyclic
 
@@ -36,9 +26,7 @@ logging subsystem ip warn
 
 logging timestamp datetime
 
-!
 
-!
 
 ip route 10.255.100.0/24 Tunnel0.0
 
@@ -52,19 +40,15 @@ ip access-list flt-list permit ip src any dest any
 
 ip access-list sec-list permit ip src any dest any
 
-!
 
-!
-
-!
 
 ike nat-traversal
 
-!
+
 
 ike proposal ikeprop encryption aes-256 hash md5 group 1024-bit
 
-!
+
 
 ike policy ike-policy peer any key secret-vpn mode aggressive ikeprop
 
@@ -72,11 +56,11 @@ ike commit-bit ike-policy
 
 ike remote-id ike-policy keyid router2-vpn
 
-!
+
 
 ipsec autokey-proposal secprop esp-aes-256 esp-md5 lifetime time 3600
 
-!
+
 
 ipsec dynamic-map auto sec-list secprop ike ike-policy
 
@@ -86,33 +70,33 @@ ipsec local-id auto 10.255.100.161/24
 
 ipsec remote-id auto 10.255.100.160/24
 
-!
+
 
 telnet-server ip enable
 
-!
+
 
 http-server ip enable
 
-!
+
 
 device FastEthernet0/0
 
-!
+
 
 device FastEthernet0/1
 
-!
+
 
 device FastEthernet1/0
 
-!
+
 
 device BRI1/0
 
   isdn switch-type hsd128k
 
-!
+
 
 interface FastEthernet0/0.0
 
@@ -122,7 +106,7 @@ interface FastEthernet0/0.0
 
   no shutdown
 
-!
+
 
 interface FastEthernet0/1.0
 
@@ -130,7 +114,7 @@ interface FastEthernet0/1.0
 
   shutdown
 
-!
+
 
 interface FastEthernet1/0.0
 
@@ -138,7 +122,7 @@ interface FastEthernet1/0.0
 
   shutdown
 
-!
+
 
 interface BRI1/0.0
 
@@ -150,7 +134,7 @@ interface BRI1/0.0
 
   shutdown
 
-!
+
 
 interface FastEthernet0/0.1
 
@@ -164,19 +148,19 @@ interface FastEthernet0/0.1
 
   shutdown
 
-!
+
 
 interface Loopback0.0
 
   no ip address
 
-!
+
 
 interface Null0.0
 
   no ip address
 
-!
+
 
 interface Tunnel0.0
 
@@ -189,3 +173,4 @@ interface Tunnel0.0
   ipsec policy tunnel auto out
 
   no shutdown
+
