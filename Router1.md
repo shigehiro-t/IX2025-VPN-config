@@ -34,11 +34,11 @@ username admin password hash 0C34240482 administrator
 
 !
 
-logging buffered 131072
+logging buffered 10000 cyclic
 
-logging subsystem ike debug
+logging subsystem ike warn
 
-logging subsystem ip info
+logging subsystem ip warn
 
 logging timestamp datetime
 
@@ -47,8 +47,6 @@ logging timestamp datetime
 !       
 
 ip route default Tunnel0.0
-
-ip route 10.255.100.0/24 Tunnel0.0
 
 ip access-list flt-list permit udp src any sport any dest any dport eq 500
 
@@ -78,7 +76,7 @@ ike proposal ikeprop encryption aes-256 hash md5 group 1024-bit
 
 !
 
-ike policy ike-policy peer 49.135.45.135 key secret-vpn mode aggressive ikeprop
+ike policy ike-policy peer 10.255.100.161 key secret-vpn mode aggressive ikeprop
 
 ike keepalive ike-policy 10 3
 
@@ -90,7 +88,7 @@ ipsec autokey-proposal secprop esp-aes-256 esp-md5 lifetime time 3600
 
 !
 
-ipsec autokey-map ipsec-policy sec-list peer 49.135.45.135 default
+ipsec autokey-map ipsec-policy sec-list peer 10.255.100.161 default
 
 ipsec local-id ipsec-policy 10.255.100.160/24
 
@@ -140,17 +138,7 @@ telnet-server ip enable
 
 !
 
-ip router ospf 1
-
-  router-id 10.255.100.160
-
-  passive-interface FastEthernet1/0.0
-
-  area 0
-
-  network Tunnel0.0 area 0
-
-  network FastEthernet1/0.0 area 0
+!
 
 !
 
@@ -217,8 +205,6 @@ interface FastEthernet0/0.1
   auto-connect
 
   no ip address
-
-  ip filter udplist 1 in
 
   shutdown
 

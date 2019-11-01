@@ -28,9 +28,11 @@ username admin password hash 0C34240482 administrator
 
 !
 
-!logging buffered 131072
+!logging buffered 100000 cyclic
 
 logging subsystem ike warn
+
+logging subsystem ip warn
 
 logging timestamp datetime
 
@@ -84,22 +86,6 @@ ipsec local-id auto 10.255.100.161/24
 
 ipsec remote-id auto 10.255.100.160/24
 
-!       
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
 !
 
 telnet-server ip enable
@@ -107,36 +93,6 @@ telnet-server ip enable
 !
 
 http-server ip enable
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
-!
-
-ip router ospf 1
-
-  router-id 10.255.100.161
-
-  area 0
-
-  network Tunnel0.0 area 0
 
 !
 
