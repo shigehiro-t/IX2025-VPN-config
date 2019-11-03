@@ -72,7 +72,7 @@ device BRI1/0
 
 interface FastEthernet0/0.0
 
-  ip address dhcp receive-default
+  ip address 10.255.100.160/24
 
   ip napt enable
 

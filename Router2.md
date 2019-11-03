@@ -100,9 +100,23 @@ device BRI1/0
 
 interface FastEthernet0/0.0
 
-  ip address dhcp
+  ip address 10.255.100.161/24
 
-  ip filter flt-list 1 in
+  ip napt enable
+
+  ip napt service ipsec 10.255.100.161 none tcp 50
+
+  ip napt service ping 10.255.100.161 none icmp any
+
+  ip napt service telnet 10.255.100.161 none tcp 23
+
+  ip napt service ike 10.255.100.161 none udp 500
+
+  ip napt service ike2 10.255.100.161 none udp 4500
+
+  ip napt service natt 10.255.100.161 none udp 1701
+
+  ip filter flt-list 30 in
 
   no shutdown
 
@@ -118,9 +132,9 @@ interface FastEthernet0/1.0
 
 interface FastEthernet1/0.0
 
-  no ip address
+  ip address 192.168.255.2/28
 
-  shutdown
+  no shutdown
 
 
 
