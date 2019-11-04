@@ -1,11 +1,3 @@
-! NEC Portable Internetwork Core Operating System Software
-
-! IX Series IX2025 (magellan-sec) Software, Version 9.5.20, RELEASE SOFTWARE
-
-! Compiled Mar 06-Wed-2019 17:03:09 JST #2
-
-! Current time Nov 01-Fri-2019 19:15:34 JST
-
 hostname Router1
 
 
@@ -21,6 +13,12 @@ logging subsystem ike debug
 logging subsystem ip warn
 
 logging timestamp datetime
+
+
+
+ip route 10.255.100.0/24 Tunnel0.0
+
+ip route 10.255.100.161/24 Fastether0/0.1
 
 
 
@@ -48,13 +46,17 @@ ipsec autokey-proposal secprop esp-aes-256 esp-md5 lifetime time 3600
 
 ipsec autokey-map ipsec-policy sec-list peer 10.255.100.161 default
 
-ipsec local-id ipsec-policy 10.255.100.160/24
+ipsec local-id ipsec-policy 192.168.255.1/28
 
-ipsec remote-id ipsec-policy 10.255.100.161/24
+ipsec remote-id ipsec-policy 192.168.255.2/28
 
 
 
 telnet-server ip enable
+
+
+
+http-server ip enable
 
 
 
@@ -130,7 +132,15 @@ interface FastEthernet0/0.1
 
   no ip address
 
-  ip filter udplist 1 in
+  ip filter ike-list 1 in
+
+  ip filter ike2-list 1 in
+
+  ip filter natt-list 1 in
+
+  ip filter ipsec-list 1 in
+
+  ip filter icmp-list 1 in
 
   shutdown
 
