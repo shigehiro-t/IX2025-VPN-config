@@ -54,25 +54,35 @@ ipsec remote-id ipsec-policy 192.168.255.2/28
 
 telnet-server ip enable
 
+telnet-server ip access-list console
+
 
 
 http-server ip enable
 
 
 
-device FastEthernet0/0
+interface FastEthernet1/0.0
 
-device FastEthernet0/1
+  ip address 192.168.255.1/28
 
-device FastEthernet1/0
+  no shutdown
 
-device BRI1/0
-
-  isdn switch-type hsd128k
+configure
 
 
 
-interface FastEthernet0/0.0
+interface FastEthernet0/0.1
+
+  ip filter ike-list 1 in
+
+  ip filter ike2-list 1 in
+
+  ip filter natt-list 1 in
+
+  ip filter ipsec-list 1 in
+
+  ip filter -list 1 in
 
   ip address 10.255.100.160/24
 
@@ -94,65 +104,7 @@ interface FastEthernet0/0.0
 
   no shutdown
 
-
-
-interface FastEthernet0/1.0
-
-  no ip address
-
-  shutdown
-
-
-
-interface FastEthernet1/0.0
-
-  ip address 192.168.255.1/28
-
-  no shutdown
-
-
-
-interface BRI1/0.0
-
-  encapsulation ppp
-
-  no auto-connect
-
-  no ip address
-
-  shutdown
-
-
-
-interface FastEthernet0/0.1
-
-  encapsulation pppoe
-
-  auto-connect
-
-  no ip address
-
-  ip filter ike-list 1 in
-
-  ip filter ike2-list 1 in
-
-  ip filter natt-list 1 in
-
-  ip filter ipsec-list 1 in
-
-  ip filter icmp-list 1 in
-
-  shutdown
-
-
-
-interface Loopback0.0
-
-  no ip address
-
-interface Null0.0
-
-  no ip address
+configure
 
 
 
@@ -160,10 +112,18 @@ interface Tunnel0.0
 
   tunnel mode ipsec
 
-  ip unnumbered FastEthernet1/0.0
+  ip unnumbered FastEthernet0/0.1
 
   ip tcp adjust-mss auto
 
   ipsec policy tunnel ipsec-policy out
 
   no shutdown
+
+configure
+
+
+
+!assignable-range 192.168.255.2 192.168.255.7
+
+!ip dhcp enable

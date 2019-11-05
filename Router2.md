@@ -6,7 +6,7 @@ username admin password hash 0C34240482 administrator
 
 
 
-!logging buffered 100000 cyclic
+logging buffered 100000 cyclic
 
 logging subsystem ike warn
 
@@ -48,29 +48,35 @@ ipsec remote-id ipsec-policy 192.168.255.1/28
 
 telnet-server ip enable
 
-
+ssh-server ip 
 
 http-server ip enable
 
 
 
-device FastEthernet0/0
-
-device FastEthernet0/1
-
-device FastEthernet1/0
-
-device BRI1/0
-
-  isdn switch-type hsd128k
+ip napt enable
 
 
 
-interface FastEthernet0/0.0
+interface FastEthernet1/0.0
+
+  ip address 192.168.255.2/28
+
+  no shutdown
+
+configure
+
+
+
+interface FastEthernet0/0.1
 
   ip address 10.255.100.161/24
 
   ip napt enable
+
+  ip napt service telnet 10.255.100.161
+
+  ip napt service ssh 10.255.100.161
 
   ip napt service ipsec 10.255.100.161 none tcp 50
 
@@ -86,61 +92,19 @@ interface FastEthernet0/0.0
 
   ip filter flt-list 30 in
 
-  no shutdown
+  ip filter ike-list 1 in
 
+  ip filter ike2-list 1 in
 
+  ip filter natt-list 1 in
 
-interface FastEthernet0/1.0
+  ip filter ipsec-list 1 in 
 
-  no ip address
-
-  shutdown
-
-
-
-interface FastEthernet1/0.0
-
-  ip address 192.168.255.2/28
+  ip filter icmp-list 1 in
 
   no shutdown
 
-
-
-interface BRI1/0.0
-
-  encapsulation ppp
-
-  no auto-connect
-
-  no ip address
-
-  shutdown
-
-
-
-interface FastEthernet0/0.1
-
-  encapsulation pppoe
-
-  auto-connect
-
-  no ip address
-
-  ip filter udplist 1 
-
-  ip filter 
-
-  shutdown
-
-
-
-interface Loopback0.0
-
-  no ip address
-
-interface Null0.0
-
-  no ip address
+configure
 
 
 
@@ -148,7 +112,7 @@ interface Tunnel0.0
 
   tunnel mode ipsec
 
-  ip unnumbered FastEthernet1/0.0
+  ip unnumbered FastEthernet0/0.1
 
   ip tcp adjust-mss auto
 
@@ -156,3 +120,8 @@ interface Tunnel0.0
 
   no shutdown
 
+configure
+
+
+
+!assignable-range 192.168.255.9 192.168.255.14
