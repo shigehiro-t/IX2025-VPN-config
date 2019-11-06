@@ -2,126 +2,32 @@ hostname Router2
 
 
 
-username admin password hash 0C34240482 administrator
+username admin password plain admin administrator
 
 
 
-logging buffered 100000 cyclic
-
-logging subsystem ike warn
-
-logging subsystem ip warn
-
-logging timestamp datetime
-
-
-
-ip access-list ike-list permit udp src any sport any dest any dport eq 500
-
-ip access-list ike2-list permit udp src any sport any dest any dport eq 4500
-
-ip access-list natt-list permit udp src any sport any dest any dport eq 1701
-
-ip access-list ipsec-list permit ip src any dest 50
-
-ip access-list icmp-list permit icmp type 8
-
-ip access-list sec-list permit ip src any dest any
-
-
-
-ike proposal ikeprop encryption aes-256 hash md5 group 1024-bit
-
-ike policy ike-policy peer any key secret-vpn mode aggressive ikeprop
-
-
-
-ipsec autokey-proposal secprop esp-aes-256 esp-md5 lifetime time 3600
-
-ipsec autokey-map ipsec-policy sec-list secprop ike ike-policy
-
-ipsec local-id ipsec-policy 192.168.255.2/28
-
-ipsec remote-id ipsec-policy 192.168.255.1/28
-
-
-
-telnet-server ip enable
-
-ssh-server ip 
+ssh-server ip enable
 
 http-server ip enable
 
-
-
-ip napt enable
-
-
-
-interface FastEthernet1/0.0
-
-  ip address 192.168.255.2/28
-
-  no shutdown
-
-configure
+telnet-server ip enable
 
 
 
-interface FastEthernet0/0.1
+interface FastEthernet0/0.0
 
   ip address 10.255.100.161/24
 
-  ip napt enable
+  ip napt service ssh 10.255.100.161
+
+  ip napt service http 10.255.100.161
 
   ip napt service telnet 10.255.100.161
 
-  ip napt service ssh 10.255.100.161
-
-  ip napt service ipsec 10.255.100.161 none tcp 50
-
-  ip napt service ping 10.255.100.161 none icmp any
-
-  ip napt service telnet 10.255.100.161 none tcp 23
-
-  ip napt service ike 10.255.100.161 none udp 500
-
-  ip napt service ike2 10.255.100.161 none udp 4500
-
-  ip napt service natt 10.255.100.161 none udp 1701
-
-  ip filter flt-list 30 in
-
-  ip filter ike-list 1 in
-
-  ip filter ike2-list 1 in
-
-  ip filter natt-list 1 in
-
-  ip filter ipsec-list 1 in 
-
-  ip filter icmp-list 1 in
-
   no shutdown
 
 configure
 
 
 
-interface Tunnel0.0
-
-  tunnel mode ipsec
-
-  ip unnumbered FastEthernet0/0.1
-
-  ip tcp adjust-mss auto
-
-  ipsec policy tunnel ipsec-policy out
-
-  no shutdown
-
-configure
-
-
-
-!assignable-range 192.168.255.9 192.168.255.14
+pki ...
