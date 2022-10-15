@@ -17,20 +17,16 @@ logging timestamp datetime
 !
 !
 ip route 10.255.100.0/24 FastEthernet0/0.0
-ip access-list esp-list permit tcp src any sport any dest any dport eq 50
 ip access-list flt-list permit ip src 10.255.0.0/16 dest 10.255.0.0/16
 ip access-list sec-list permit ip src any dest any
-ip access-list udp-list permit udp src any sport eq 500 dest any dport eq 500
-ip access-list udp2-list permit udp src any sport eq 4500 dest any dport eq 4500
 !
 !
 !
-ike nat-traversal
 !
 ike proposal ikeprop encryption aes-256 hash sha
 !
 ike policy ike-policy peer 10.255.100.160 key secret-vpn ikeprop
-ike remote-id ike-policy address 10.255.100.160
+ike local-id ike-policy address 10.255.100.161
 !
 ipsec autokey-proposal secprop esp-aes-256 esp-sha
 !
@@ -45,7 +41,6 @@ ipsec remote-id ipsec-policy 10.255.100.160
 !
 !
 !
-proxy-dns ip enable
 !
 telnet-server ip enable
 !
@@ -64,7 +59,8 @@ http-server ip enable
 !
 !
 watch-group host 10
-  event 10 ip unreach-host 10.255.100.160 Tunnel0.0
+  event 10 ip unreach-host 10.255.100.160 FastEthernet0/0.0
+  action 10 shutdown-interface Tunnel0.0
   probe-timer restorer 60
   probe-timer variance 60
 !
@@ -89,11 +85,7 @@ device BRI1/0
 !
 interface FastEthernet0/0.0
   ip address 10.255.100.161/24
-  ip tcp adjust-mss auto
   ip filter flt-list 1 in
-  ip filter udp-list 2 in
-  ip filter udp2-list 3 in
-  ip filter esp-list 4 in
   no shutdown
 !
 interface FastEthernet0/1.0
